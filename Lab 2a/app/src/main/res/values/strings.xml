@@ -1,0 +1,20 @@
+<resources>
+
+    <string name="app_name"> Дослідження нейронних мереж. Модель Perceptron</string>
+
+    <string name="title"> Лабораторна робота 2а </string>
+    <string name="input_P_hint"> P (за стандартом - 4) </string>
+    <string name="input_x1_hint"> x1 </string>
+    <string name="separator"> : </string>
+    <string name="input_x2_hint"> x2 </string>
+    <string name="more_than_P"> Більше P </string>
+    <string name="add_point"> Додати точку </string>
+    <string name="add_points_on_assignment"> По завданню </string>
+    <string name="clear_points"> Видалити точки </string>
+    <string name="select_sigma"> Швидкість навчання: </string>
+    <string name="select_deadline"> Часовий дедлайн: </string>
+    <string name="select_max_iters"> Максимальна кількість ітерацій: </string>
+    <string name="train"> Тренування </string>
+    <string name="check"> OK </string>
+
+</resources>

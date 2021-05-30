@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        tools:context=".ui.main.PlaceholderFragment"
+        tools:ignore="UseCompoundDrawables" >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/activity_margin"
+            android:gravity="center_horizontal"
+            android:text="@string/title"
+            android:textColor="@color/title_color"
+            android:textSize="30sp" />
+
+        <EditText
+            android:id="@+id/edittext_input_P"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/activity_margin"
+            android:inputType="numberSigned|numberDecimal"
+            android:hint="@string/input_P_hint"
+            android:autofillHints="" />
+
+        <TextView
+            android:id="@+id/textview_points"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/activity_margin"
+            android:gravity="center_horizontal"
+            android:textColor="@color/green"
+            android:textSize="20sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/activity_margin"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/edittext_input_x1"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="3dp"
+                android:gravity="center"
+                android:hint="@string/input_x1_hint"
+                android:inputType="numberSigned|numberDecimal"
+                tools:ignore="Autofill" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="3dp"
+                android:gravity="center"
+                android:text="@string/separator" />
+
+            <EditText
+                android:id="@+id/edittext_input_x2"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="3dp"
+                android:gravity="center"
+                android:hint="@string/input_x2_hint"
+                android:inputType="numberSigned|numberDecimal"
+                tools:ignore="Autofill" />
+
+            <CheckBox
+                android:id="@+id/checkbox_point_is_more_than_P"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/more_than_P"
+                android:layout_margin="3dp" />
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/button_add_point"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="3dp"
+            android:layout_gravity="center"
+            android:textSize="12sp"
+            android:text="@string/add_point" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/activity_margin"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/button_add_points_on_assignment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_gravity="center"
+                android:textSize="13sp"
+                android:text="@string/add_points_on_assignment"
+                tools:ignore="ButtonStyle" />
+
+            <Button
+                android:id="@+id/button_clear_points"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:layout_margin="5dp"
+                android:layout_gravity="center"
+                android:textSize="13sp"
+                android:text="@string/clear_points"
+                tools:ignore="ButtonStyle,RelativeOverlap" />
+
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/activity_margin"
+            android:text="@string/select_sigma"
+            android:textColor="@color/text_color"
+            android:textSize="22sp" />
+
+        <Spinner
+            android:id="@+id/spinner_select_sigma"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/activity_margin"
+            android:text="@string/select_deadline"
+            android:textColor="@color/text_color"
+            android:textSize="22sp" />
+
+        <Spinner
+            android:id="@+id/spinner_select_deadline"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/activity_margin"
+            android:text="@string/select_max_iters"
+            android:textColor="@color/text_color"
+            android:textSize="22sp" />
+
+        <Spinner
+            android:id="@+id/spinner_select_max_iters"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/button_train"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_gravity="center"
+            android:textSize="13sp"
+            android:text="@string/train"
+            tools:ignore="ButtonStyle,RelativeOverlap" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/activity_margin"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/input_x1"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="3dp"
+                    android:hint="@string/input_x1_hint"
+                    android:inputType="numberSigned|numberDecimal"
+                    tools:ignore="Autofill" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="3dp"
+                    android:gravity="center"
+                    android:text="@string/separator" />
+
+                <EditText
+                    android:id="@+id/input_x2"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="3dp"
+                    android:hint="@string/input_x2_hint"
+                    android:inputType="numberSigned|numberDecimal"
+                    tools:ignore="Autofill" />
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/button_check"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:layout_margin="3dp"
+                android:layout_gravity="center"
+                android:textSize="12sp"
+                android:text="@string/check"
+                tools:ignore="RelativeOverlap" />
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/textview_output_result"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/activity_margin"
+            android:textSize="20sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/activity_margin"
+            android:textSize="20sp" />
+
+    </LinearLayout>
+
+</ScrollView>
