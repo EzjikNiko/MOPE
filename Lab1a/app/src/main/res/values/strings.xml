@@ -1,0 +1,8 @@
+<resources>
+
+    <string name="app_name"> Факторизація числа методом Ферма </string>
+
+    <string name="input_n_hint"> Введіть число </string>
+    <string name="button_count"> Розрахувати </string>
+
+</resources>
