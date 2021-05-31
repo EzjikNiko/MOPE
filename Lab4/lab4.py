@@ -4,6 +4,9 @@ import sklearn.linear_model as lm
 from scipy.stats import f, t
 from numpy.linalg import solve
 
+coefLinear = list()
+coefInteract = list()
+
 def regression(x, b):
     y = sum([x[i] * b[i] for i in range(len(x))])
     return y
@@ -67,6 +70,7 @@ def find_coef(X, Y, norm=False):
 
     if norm == 1:
         print('\nКоефіцієнти рівняння регресії з нормованими X:')
+        return True
     else:
         print('\nКоефіцієнти рівняння регресії:')
     B = [round(i, 3) for i in B]
@@ -115,15 +119,46 @@ def check(X, Y, B, n, m, norm=False):
     f3 = f1 * f2
     q = 0.05
 
+    qq = (1 + 0.95) / 2
+
     y_aver = [round(sum(i) / len(i), 3) for i in Y]
-    print('\nСереднє значення y:', y_aver)
 
     dispersion_arr = dispersion(Y, y_aver, n, m)
 
-    qq = (1 + 0.95) / 2
+    ts = kriteriy_studenta2(X[:, 1:], Y, y_aver, n, m)
     student_cr_table = t.ppf(df=f3, q=qq)
 
-    ts = kriteriy_studenta2(X[:, 1:], Y, y_aver, n, m)
+    res = [t for t in ts if t > student_cr_table]
+
+    d = len(res)
+    if d >= n:
+        print('\nF4 <= 0')
+        print('')
+        return
+    f4 = n - d
+
+    final_k = [B[i] for i in range(len(ts)) if ts[i] in res]
+
+    y_new = []
+    for j in range(n):
+        y_new.append(regression([X[j][i] for i in range(len(ts)) if ts[i] in res], final_k))
+
+    Fp = kriteriy_fishera(Y, y_aver, y_new, n, m, d, dispersion_arr)
+
+    Ft = f.ppf(dfn=f4, dfd=f3, q=1 - 0.05)
+
+    print('\nПеревірка адекватності за критерієм Фішера')
+    print('Fp =', Fp)
+    print('Ft =', Ft)
+    if Fp < Ft:
+        print('Математична модель адекватна експериментальним даним')
+        return True
+    else:
+        print('Математична модель не адекватна експериментальним даним')
+        return False
+
+    print('\nСереднє значення y:', y_aver)
+
 
     temp_cohren = f.ppf(q=(1 - q / f1), dfn=f2, dfd=(f1 - 1) * f2)
     cohren_cr_table = temp_cohren / (temp_cohren + f1 - 1)
@@ -140,38 +175,14 @@ def check(X, Y, B, n, m, norm=False):
         with_interaction_effect(n, m)
 
     print('\nКритерій Стьюдента:\n', ts)
-    res = [t for t in ts if t > student_cr_table]
-    final_k = [B[i] for i in range(len(ts)) if ts[i] in res]
     print('\nКоефіцієнти {} статистично незначущі, тому ми виключаємо їх з рівняння.'.format(
         [round(i, 3) for i in B if i not in final_k]))
 
-    y_new = []
-    for j in range(n):
-        y_new.append(regression([X[j][i] for i in range(len(ts)) if ts[i] in res], final_k))
+    global coefInteract
+    coefInteract = final_k
 
     print(f'\nЗначення "y" з коефіцієнтами {final_k}')
     print(y_new)
-
-    d = len(res)
-    if d >= n:
-        print('\nF4 <= 0')
-        print('')
-        return
-    f4 = n - d
-
-    Fp = kriteriy_fishera(Y, y_aver, y_new, n, m, d, dispersion_arr)
-
-    Ft = f.ppf(dfn=f4, dfd=f3, q=1 - 0.05)
-
-    print('\nПеревірка адекватності за критерієм Фішера')
-    print('Fp =', Fp)
-    print('Ft =', Ft)
-    if Fp < Ft:
-        print('Математична модель адекватна експериментальним даним')
-        return True
-    else:
-        print('Математична модель не адекватна експериментальним даним')
-        return False
 
 def with_interaction_effect(n, m):
     X, Y, X_norm = planing_matrix_interaction_effect(n, m)
@@ -258,36 +269,23 @@ def linear(n, m):
     cohren_cr_table = temp_cohren / (temp_cohren + f1 - 1)
     Gp = max(dispersion_arr) / sum(dispersion_arr)
 
-    print('\nПеревірка за критерієм Кохрена:\n')
-    print(f'Розрахункове значення: Gp = {Gp}'
-          f'\nТабличне значення: Gt = {cohren_cr_table}')
-    if Gp < cohren_cr_table:
-        print(f'З ймовірністю {1-q} дисперсії однорідні.')
-    else:
-        print("Необхідно збільшити ксть дослідів")
-        m += 1
-        linear(n, m)
-
     qq = (1 + 0.95) / 2
     student_cr_table = t.ppf(df=f3, q=qq)
     student_t = kriteriy_studenta(x_norm[:,1:], y_average, n, m, dispersion_arr)
 
-    print('\nТабличне значення критерій Стьюдента:\n', student_cr_table)
-    print('Розрахункове значення критерій Стьюдента:\n', student_t)
     res_student_t = [temp for temp in student_t if temp > student_cr_table]
     final_coefficients = [B[student_t.index(i)] for i in student_t if i in res_student_t]
-    print('Коефіцієнти {} статистично незначущі.'.
-          format([i for i in B if i not in final_coefficients]))
+
+    global coefLinear
+    coefLinear = final_coefficients
+
+    d = len(res_student_t)
+    f4 = n - d
 
     y_new = []
     for j in range(n):
         y_new.append(regression([x[j][student_t.index(i)] for i in student_t if i in res_student_t], final_coefficients))
 
-    print(f'\nОтримаємо значення рівння регресії для {m} дослідів: ')
-    print(y_new)
-
-    d = len(res_student_t)
-    f4 = n - d
     Fp = kriteriy_fishera(y, y_average, y_new, n, m, d, dispersion_arr)
     Ft = f.ppf(dfn=f4, dfd=f3, q=1 - 0.05)
 
@@ -301,9 +299,29 @@ def linear(n, m):
         print('Математична модель не адекватна експериментальним даним')
         return False
 
+    print('\nПеревірка за критерієм Кохрена:\n')
+    print(f'Розрахункове значення: Gp = {Gp}'
+          f'\nТабличне значення: Gt = {cohren_cr_table}')
+    if Gp < cohren_cr_table:
+        print(f'З ймовірністю {1-q} дисперсії однорідні.')
+    else:
+        print("Необхідно збільшити ксть дослідів")
+        m += 1
+        linear(n, m)
+
+    print('\nТабличне значення критерій Стьюдента:\n', student_cr_table)
+    print('Розрахункове значення критерій Стьюдента:\n', student_t)
+    print('Коефіцієнти {} статистично незначущі.'.
+          format([i for i in B if i not in final_coefficients]))
+
+    print(f'\nОтримаємо значення рівння регресії для {m} дослідів: ')
+    print(y_new)
+
 def main(n, m):
     if not linear(n, m):
         with_interaction_effect(n, m)
+        print(f'До взаємодії {coefLinear}')
+        print(f'Після взаємодії {coefInteract}')
 
 if __name__ == '__main__':
     x_range = ((-30, 0), (-35, 10), (0, 20))
