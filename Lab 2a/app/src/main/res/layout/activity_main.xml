@@ -178,6 +178,16 @@
             android:text="@string/train"
             tools:ignore="ButtonStyle,RelativeOverlap" />
 
+        <Button
+            android:id="@+id/button_train_with_different_sigmas"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_gravity="center"
+            android:textSize="13sp"
+            android:text="@string/train_with_different_sigmas"
+            tools:ignore="ButtonStyle,RelativeOverlap" />
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

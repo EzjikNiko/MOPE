@@ -22,7 +22,9 @@ public class Perceptron {
     private final List<Boolean> pointIsMoreP = new ArrayList<>();
     private boolean trained = false;
 
-    double time0, time;
+    private double time;
+
+    private int iters;
 
     public Perceptron(double w1, double w2, double sigma, double P) {
 
@@ -95,9 +97,9 @@ public class Perceptron {
 
     public void train() throws LabException {
 
-        this.time0 = System.nanoTime();
+        double time0 = System.nanoTime();
 
-        int iters = 0;
+        this.iters = 0;
 
         while (!this.trained) {
 
@@ -116,11 +118,11 @@ public class Perceptron {
 
             this.time = System.nanoTime() - time0;
 
-            iters++;
+            this.iters++;
 
-            if (this.timeLimited && time >= this.deadline) throw new TimeExceededException();
+            if (this.timeLimited && this.time >= this.deadline) throw new TimeExceededException();
 
-            if (this.itersLimited && iters >= this.max_iters) throw new ItersExceededException();
+            if (this.itersLimited && this.iters >= this.max_iters) throw new ItersExceededException();
 
             if (noMistakes) {
                 this.trained = true;
@@ -139,6 +141,24 @@ public class Perceptron {
     public boolean isTrained() {
 
         return this.trained;
+
+    }
+
+    public double getSigma() {
+
+        return this.sigma;
+
+    }
+
+    public double getTime() {
+
+        return this.time;
+
+    }
+
+    public int getIters() {
+
+        return this.iters;
 
     }
 

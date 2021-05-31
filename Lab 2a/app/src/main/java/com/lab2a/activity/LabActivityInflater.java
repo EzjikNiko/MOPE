@@ -71,6 +71,9 @@ public class LabActivityInflater {
 
         Button button_train = activity.findViewById(R.id.button_train);
 
+        Button button_train_with_different_sigmas =
+                activity.findViewById(R.id.button_train_with_different_sigmas);
+
         EditText input_x1 = activity.findViewById(R.id.input_x1);
         EditText input_x2 = activity.findViewById(R.id.input_x2);
         Button button_check = activity.findViewById(R.id.button_check);
@@ -308,6 +311,127 @@ public class LabActivityInflater {
 
         };
 
+        View.OnClickListener onButtonTrainWithDifferentSigmasClick = v -> {
+
+            double[] sigmas = new double[] {0.001, 0.01, 0.05, 0.1, 0.2, 0.3};
+
+            double deadline = 5000000000D;
+            int max_iters = 1000000;
+
+            Perceptron[] perceptrons = new Perceptron[6];
+
+            String P_raw = String.valueOf(edittext_input_P.getText());
+
+            if (P_raw.trim().equals("") || P_raw.trim().equals(".") || P_raw.trim().equals(".")) {
+                P[0] = 4;
+            } else {
+                P[0] = Double.parseDouble(P_raw);
+            }
+
+            for (int i = 0; i < sigmas.length; i++) {
+
+                try {
+
+                    perceptrons[i] = new Perceptron(
+                            0.0, 0.0, sigmas[i], P[0], deadline, max_iters
+                    );
+
+                    for (int j = 0; j < points.size(); j++) {
+                        perceptrons[i].addPoint(points.get(j)[0], points.get(j)[1], moreThanP.get(j));
+                    }
+
+                    perceptrons[i].train();
+
+                } catch (LabException exception) {
+
+                    exception.printStackTrace();
+
+                }
+
+            }
+
+            ArrayList<Perceptron> trainedPerceptrons = new ArrayList<>();
+
+            StringBuilder out = new StringBuilder();
+
+            for (int i = 0; i < perceptrons.length; i++) {
+
+                out.append("Сігма: ").append(sigmas[i]).append("\n");
+
+                if (perceptrons[i].isTrained()) {
+
+                    trainedPerceptrons.add(perceptrons[i]);
+
+                    out.append("Натреновано: Так").append("\n");
+                    out.append("Час: ").append(perceptrons[i].getTime() / 1000000000).append(" с").append("\n");
+                    out.append("Кількість ітерацій: ").append(perceptrons[i].getIters()).append("\n\n");
+
+                } else {
+
+                    out.append("Натреновано: Ні").append("\n\n");
+
+                }
+
+            }
+
+            ArrayList<Double> timeBests = new ArrayList<>();
+            ArrayList<Double> itersBests = new ArrayList<>();
+
+            if (!trainedPerceptrons.isEmpty()) {
+
+                double bestTime = trainedPerceptrons.get(0).getTime();
+                int bestIters = trainedPerceptrons.get(0).getIters();
+
+                for (int i = 0; i < trainedPerceptrons.size(); i++) {
+
+                    if (trainedPerceptrons.get(i).getTime() < bestTime)
+                        bestTime = trainedPerceptrons.get(i).getTime();
+
+                    if (trainedPerceptrons.get(i).getIters() < bestIters)
+                        bestIters = trainedPerceptrons.get(i).getIters();
+
+                }
+
+                for (int i = 0; i < trainedPerceptrons.size(); i++) {
+
+                    if (trainedPerceptrons.get(i).getTime() == bestTime)
+                        timeBests.add(trainedPerceptrons.get(i).getSigma());
+
+                    if (trainedPerceptrons.get(i).getIters() == bestIters)
+                        itersBests.add(trainedPerceptrons.get(i).getSigma());
+
+                }
+
+            }
+
+            out.append("Найкращі сігми за часом: ");
+
+            if (!timeBests.isEmpty()) {
+
+                for (int i = 0; i < timeBests.size() - 1; i++) {
+                    out.append(timeBests.get(i)).append(", ");
+                }
+
+                out.append(timeBests.get(timeBests.size() - 1)).append("\n\n");
+
+            } else out.append("Немає\n\n");
+
+            out.append("Найкращі сігми за кількістю ітерацій: ");
+
+            if (!itersBests.isEmpty()) {
+
+                for (int i = 0; i < itersBests.size() - 1; i++) {
+                    out.append(itersBests.get(i)).append(", ");
+                }
+
+                out.append(itersBests.get(itersBests.size() - 1)).append("\n");
+
+            } else out.append("Немає\n\n");
+
+            textViewOutputResult.setTextColor(activity.getResources().getColor(R.color.green));
+            textViewOutputResult.setText(out);
+
+        };
 
 
         View.OnClickListener onButtonCheckClick = v -> {
@@ -361,6 +485,8 @@ public class LabActivityInflater {
         button_clear_points.setOnClickListener(onButtonClearPointsClick);
 
         button_train.setOnClickListener(onButtonTrainClick);
+
+        button_train_with_different_sigmas.setOnClickListener(onButtonTrainWithDifferentSigmasClick);
 
         button_check.setOnClickListener(onButtonCheckClick);
 
