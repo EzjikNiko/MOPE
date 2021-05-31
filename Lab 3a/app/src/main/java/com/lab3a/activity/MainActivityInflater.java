@@ -5,6 +5,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.os.CountDownTimer;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,7 +13,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.lab3a.R;
 import com.lab3a.execution.EquationSolver;
 import com.lab3a.utils.Permissions;
-
 
 public class MainActivityInflater {
 
@@ -65,6 +65,8 @@ public class MainActivityInflater {
 
                 long y = Long.parseLong(string_y);
 
+                long flag = 0;
+
                 EquationSolver solver = new EquationSolver();
 
                 solver.setCoefficients(new long[] {a, b, c, d});
@@ -86,6 +88,37 @@ public class MainActivityInflater {
                 for (int i = 0; i < roots.length; i++) {
                     out.append("X").append(i + 1).append(" = ").append(roots[i]).append("\n");
                 }
+
+                new CountDownTimer(3000, 1000) {
+
+                    public void onTick(long millisUntilFinished) {
+                        EquationSolver solvertime = new EquationSolver();
+
+                        solvertime.setCoefficients(new long[] {a, b, c, d});
+                        solvertime.setY(y);
+
+                        solvertime.solve();
+
+                        long[] roots = solvertime.getRoots();
+
+                        Permissions permissionstime = new Permissions(roots);
+
+                        long[][] perms = permissionstime.getPerms();
+
+                        for (long[] perm : perms) {
+                            if (a * perm[0] + b * perm[1] + c * perm[2] + d * perm[3] == y)
+                                roots = perm;
+                        }
+                        long flag1 = flag + 1;
+                        flag = flag1;
+                    }
+
+                    public void onFinish() {
+                        StringBuilder out = new StringBuilder();
+                        out.append("За 3 секунды було вирішенно ").append(flag).append("задач.").append("\n");
+                    }
+                }.start();
+
 
                 textview_output_result.setTextColor(activity.getResources().getColor(R.color.green));
                 textview_output_result.setText(out);
