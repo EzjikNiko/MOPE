@@ -41,6 +41,8 @@ def main():
 
     def uniformityDispersion():
         m = min(rkrTable, key=lambda x: abs(x - numOfExperiments))
+        if m>20:
+            raise Exception ("Не може бути обраховано. Не вистачає табличних даних (m>20).")
         p = 0
         for ruv in (Ruv1, Ruv2, Ruv3):
             if ruv > rkrTable[m][0]:
