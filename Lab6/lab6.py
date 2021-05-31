@@ -5,7 +5,9 @@ from _decimal import Decimal
 from functools import reduce
 from itertools import compress
 from scipy.stats import f, t
+from time import time
 
+time1=0
 xMin = [-20, 30, 30]
 xMax = [30, 80, 45]
 x0 = [(xMax[_] + xMin[_]) / 2 for _ in range(3)]
@@ -140,6 +142,7 @@ def studentCriteria(m, n, y_table, betaCoeffs):
     averageVariation = numpy.average(list(map(numpy.var, y_table)))
     variationBetaS = averageVariation / n / m
     standardDeviationBetaS = math.sqrt(variationBetaS)
+    time1 = time()
     Ti = [abs(betaCoeffs[i]) / standardDeviationBetaS for i in range(len(betaCoeffs))]
     f3 = (m - 1) * n
     q = 0.05
@@ -177,7 +180,11 @@ def fisherCriteria(m, N, d, tableX, tableY, coeffsB, importance):
     print("Теоретичні значення y для різних комбінацій факторів:")
     print("\n".join(["{arr[0]}: y = {arr[1]}".format(arr=el) for el in theoreticalValsToPrint]))
     print("Fp = {}, Ft = {}".format(Fp, Ft))
-    print("Fp < Ft => модель адекватна" if Fp < Ft else "Fp > Ft => модель неадекватна")
+    time2 = time()
+    if (time2 - time1) > 0.1:
+        print("Модель неадекватна")
+    else:
+        print("Fp < Ft => модель адекватна" if Fp < Ft else "Fp > Ft => модель неадекватна")
     return True if Fp < Ft else False
 
 
