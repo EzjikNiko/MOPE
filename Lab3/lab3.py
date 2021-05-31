@@ -1,5 +1,6 @@
 from random import randint
 import numpy as np
+from scipy.stats import f, t
 
 def findA(a, b=None):
     if b is None:
@@ -89,6 +90,7 @@ def fisher(y_r, y_st, b_det, disp, m):
     else:
         return f"\nРівняння регресії неадекватно оригіналу: \nFap > Ft: {round(Fap, 2)} > {Ft}"
 
+
 def experiment(m, min_x1, max_x1, min_x2, max_x2, min_x3, max_x3):
     y_min = round((min_x1 + min_x2 + min_x3) / 3) + 200
     y_max = round((max_x1 + max_x2 + max_x3) / 3) + 200
@@ -158,7 +160,19 @@ def experiment(m, min_x1, max_x1, min_x2, max_x2, min_x3, max_x3):
 
         y_st = [round(b_cut[0] + x[i][0] * b_cut[1] + x[i][1] * b_cut[2] + x[i][2] * b_cut[3], 2) for i in range(N)]
 
-    fisher_cr = fisher(y_r, y_st, b_det, disp, m)
+    f1 = m - 1
+    f2 = N
+    f3 = f1 * f2
+
+    student = t.ppf(q=1 - 0.025)
+    t_student = student(df=f3)
+    ts = student()
+    res = [t for t in ts if t > t_student]
+
+    d = len(res)
+    f4 = N - d
+
+    fisher_cr = f.ppf(dfn=f4, dfd=f3, q=1 - 0.05)
 
     print(f"\nМатриця планування для m = {m}:")
     for i in range(m):
