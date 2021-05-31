@@ -54,6 +54,8 @@ public class MainActivityInflater {
                         result.append("\n").append("Просте число");
                     }
 
+                    result.append("\n").append("Витрачено часу для пошуку відповіді: " + timefinal);
+
                     textViewOutputResult.setTextColor(activity.getResources().getColor(R.color.green));
                     textViewOutputResult.setText(result);
 

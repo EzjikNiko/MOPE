@@ -5,7 +5,6 @@ import com.lab1.utils.exception.TimeExceededException;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class factorial {
 
     private long time0;
@@ -44,4 +43,7 @@ public class factorial {
 
         return new long[]{(long) x, (long) Math.sqrt(y)};
     }
+
+    long timefinal = System.nanoTime() - this.time0;
+
 }
